@@ -8,9 +8,13 @@ use Illuminate\Http\Request;
 
 class ApiMenuController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
     public function index()
     {
-        return Menu::all();
+        return Menu::with('restaurant')->get();
     }
 
     /**
@@ -69,7 +73,6 @@ class ApiMenuController extends Controller
     public function update(Request $request, $id)
     {   
         $rest= Menu::find($id);
-        $rest = new Menu();
         $rest->title = $request->input('title');
         $rest->restaurant_id = $request->input('restaurant_id');
         return $rest->save();

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ApiControllers\ApiDishController;
 use App\Http\Controllers\ApiControllers\ApiMenuController;
 use App\Http\Controllers\ApiControllers\ApiRestaurantController;
+use App\Http\Controllers\ApiControllers\AuthController;
 use App\Models\Dish;
 use App\Models\Menu;
 use App\Models\Restaurant;
@@ -27,4 +28,11 @@ Route::group(['prefix' => 'v1'], function () {
     Route::resource('/restaurants', ApiRestaurantController::class);
     Route::resource('/menus', ApiMenuController::class);
     Route::resource('/dishes', ApiDishController::class);
+});
+Route::controller(AuthController::class)->group(function () {
+    Route::post('login', 'login');
+    Route::post('register', 'register');
+    Route::post('logout', 'logout');
+    Route::post('refresh', 'refresh');
+
 });
