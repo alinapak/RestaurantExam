@@ -31,29 +31,29 @@ class AuthController extends Controller
             ], 401);
         }
 // backendine admino validacija, jei user is admin, login veikia
-    //   if (Auth::user()->isAdministrator()) {
-    //     $user = Auth::user();
-    //     // $u_roles = $user->roles;
-    //     // error_log($u_roles);
-    //     return response()->json([
-    //             'status' => 'success',
-    //             'user' => $user,
-    //             'authorisation' => [
-    //                 'token' => $token,
-    //                 'type' => 'bearer',
-    //             ]
-    //         ]);
-    // }
+      if (Auth::user()->isAdministrator()) {
+        $user = Auth::user();
+        // $u_roles = $user->roles;
+        // error_log($u_roles);
+        return response()->json([
+                'status' => 'success',
+                'user' => $user,
+                'authorisation' => [
+                    'token' => $token,
+                    'type' => 'bearer',
+                ]
+            ]);
+    }
 // // visu useriu prijungimas
-    $user = Auth::user();
-    return response()->json([
-            'status' => 'success',
-            'user' => $user,
-            'authorisation' => [
-                'token' => $token,
-                'type' => 'bearer',
-            ]
-        ]);
+    // $user = Auth::user();
+    // return response()->json([
+    //         'status' => 'success',
+    //         'user' => $user,
+    //         'authorisation' => [
+    //             'token' => $token,
+    //             'type' => 'bearer',
+    //         ]
+    //     ]);
 
 }
 
