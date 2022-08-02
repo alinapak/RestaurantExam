@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-
 class AuthController extends Controller
 {
+
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login','register']]);
@@ -30,18 +30,32 @@ class AuthController extends Controller
                 'message' => 'Unauthorized',
             ], 401);
         }
+// backendine admino validacija, jei user is admin, login veikia
+    //   if (Auth::user()->isAdministrator()) {
+    //     $user = Auth::user();
+    //     // $u_roles = $user->roles;
+    //     // error_log($u_roles);
+    //     return response()->json([
+    //             'status' => 'success',
+    //             'user' => $user,
+    //             'authorisation' => [
+    //                 'token' => $token,
+    //                 'type' => 'bearer',
+    //             ]
+    //         ]);
+    // }
+// // visu useriu prijungimas
+    $user = Auth::user();
+    return response()->json([
+            'status' => 'success',
+            'user' => $user,
+            'authorisation' => [
+                'token' => $token,
+                'type' => 'bearer',
+            ]
+        ]);
 
-        $user = Auth::user();
-        return response()->json([
-                'status' => 'success',
-                'user' => $user,
-                'authorisation' => [
-                    'token' => $token,
-                    'type' => 'bearer',
-                ]
-            ]);
-
-    }
+}
 
     public function register(Request $request){
         $request->validate([
@@ -88,4 +102,5 @@ class AuthController extends Controller
             ]
         ]);
     }
+
 }
