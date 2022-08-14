@@ -8,13 +8,13 @@ use Illuminate\Http\Request;
 
 class ApiMenuController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:api');
+    // }
     public function index()
     {
-        return Menu::with('restaurant')->get();
+        return Menu::with('restaurant','dishes')->get();
     }
 
     /**
@@ -50,6 +50,7 @@ class ApiMenuController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id){
+        return Menu::with('dishes')->find($id);
     }
 
     /**

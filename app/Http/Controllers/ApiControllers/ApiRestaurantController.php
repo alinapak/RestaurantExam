@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\ApiControllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Menu;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
 
 class ApiRestaurantController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:api');
+    // }
     public function index()
     {
         return Restaurant::with('menu')->get();
@@ -52,6 +53,7 @@ class ApiRestaurantController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id){
+        return Restaurant::with('menu')->find($id);
     }
 
     /**
