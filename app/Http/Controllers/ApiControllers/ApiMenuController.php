@@ -35,7 +35,8 @@ class ApiMenuController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|unique:menus'
+            'title' => 'required|unique:menus',
+            'restaurant_id' => 'required'
         ]);
         $rest = new Menu();
         $rest->title = $request->input('title');
@@ -74,6 +75,9 @@ class ApiMenuController extends Controller
     public function update(Request $request, $id)
     {   
         $rest= Menu::find($id);
+        $validated = $request->validate([
+            'restaurant_id' => 'required'
+        ]);
         $rest->title = $request->input('title');
         $rest->restaurant_id = $request->input('restaurant_id');
         return $rest->save();
