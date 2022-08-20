@@ -35,8 +35,9 @@ class ApiRestaurantController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|unique:restaurants'
+        $request->validate([
+            'title' => 'required|unique:restaurants',
+            'code' => 'unique:restaurants'
         ]);
         $rest = new Restaurant();
         $rest->title = $request->input('title');
@@ -52,7 +53,8 @@ class ApiRestaurantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id){
+    public function show($id)
+    {
         return Restaurant::with('menu')->find($id);
     }
 
@@ -75,8 +77,12 @@ class ApiRestaurantController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {   
-        $rest= Restaurant::find($id);
+    {
+        // $request->validate([
+        //     'title' => 'required:restaurants',
+        //     'code' => 'unique:restaurants'
+        // ]);
+        $rest = Restaurant::find($id);
         $rest->title = $request->input('title');
         $rest->code = $request->input('code');
         $rest->city = $request->input('city');

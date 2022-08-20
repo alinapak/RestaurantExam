@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 
 class ApiMenuController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:api');
+    // }
     public function index()
     {
         return Menu::with('restaurant','dishes')->get();
@@ -34,7 +34,7 @@ class ApiMenuController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'title' => 'required|unique:menus',
             'restaurant_id' => 'required'
         ]);
@@ -74,10 +74,10 @@ class ApiMenuController extends Controller
      */
     public function update(Request $request, $id)
     {   
-        $rest= Menu::find($id);
-        $validated = $request->validate([
+        $request->validate([
             'restaurant_id' => 'required'
         ]);
+        $rest= Menu::find($id);
         $rest->title = $request->input('title');
         $rest->restaurant_id = $request->input('restaurant_id');
         return $rest->save();
