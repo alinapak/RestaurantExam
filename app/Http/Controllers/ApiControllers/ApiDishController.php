@@ -5,14 +5,15 @@ namespace App\Http\Controllers\ApiControllers;
 use App\Http\Controllers\Controller;
 use App\Models\Dish;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ApiDishController extends Controller
 {
-       public function __construct()
+    public function __construct()
     {
         $this->middleware('auth:api');
     }
-     /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -42,18 +43,21 @@ class ApiDishController extends Controller
      */
     public function store(Request $request)
     {
-        $dish = new Dish();
-        $dish->title = $request->input('title');
-        $dish->price = $request->input('price');
-        if ($request->file('file') == null) {
-            $dish->file = "";
-        }else if ($request->file('file') !== null) {
-            $dish->file = $request->file('file')->store('images');  
-        }  
-        $dish->description = $request->input('description');
-        $dish->menu_id = $request->input('menu_id');
-        return $dish->save();
+        if (Auth::user()->isAdministrator()) {
+            $dish = new Dish();
+            $dish->title = $request->input('title');
+            $dish->price = $request->input('price');
+            if ($request->file('file') == null) {
+                $dish->file = "";
+            } else if ($request->file('file') !== null) {
+                $dish->file = $request->file('file')->store('images');
+            }
+            $dish->description = $request->input('description');
+            $dish->menu_id = $request->input('menu_id');
+            return $dish->save();
+        }
     }
+
 
     /**
      * Display the specified resource.
@@ -63,7 +67,6 @@ class ApiDishController extends Controller
      */
     public function show($id)
     {
-        
     }
 
     /**
@@ -86,19 +89,20 @@ class ApiDishController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $dish= Dish::find($id);
-        $dish->title = $request->input('title');
-        $dish->price = $request->input('price');
-        if ($request->file('file') == null) {
-            $dish->file = "";
-        }else if ($request->file('file') !== null) {
-            $dish->file = $request->file('file')->store('images');  
-        }  
-        $dish->description = $request->input('description');
-        $dish->menu_id = $request->input('menu_id');
-        return $dish->save();
+        if (Auth::user()->isAdministrator()) {
+            $dish = Dish::find($id);
+            $dish->title = $request->input('title');
+            $dish->price = $request->input('price');
+            if ($request->file('file') == null) {
+                $dish->file = "";
+            } else if ($request->file('file') !== null) {
+                $dish->file = $request->file('file')->store('images');
+            }
+            $dish->description = $request->input('description');
+            $dish->menu_id = $request->input('menu_id');
+            return $dish->save();
+        }
     }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -107,8 +111,10 @@ class ApiDishController extends Controller
      */
     public function destroy($id)
     {
-        return (Dish::destroy($id) == 1) ? 
-        response()->json(['success' => 'success'], 200) : 
-        response()->json(['error' => 'delete not successful'], 500);
+        if (Auth::user()->isAdministrator()) {
+            return (Dish::destroy($id) == 1) ?
+                response()->json(['success' => 'success'], 200) :
+                response()->json(['error' => 'delete not successful'], 500);
+        }
     }
 }

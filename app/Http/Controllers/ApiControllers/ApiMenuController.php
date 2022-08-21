@@ -5,6 +5,7 @@ namespace App\Http\Controllers\ApiControllers;
 use App\Http\Controllers\Controller;
 use App\Models\Menu;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ApiMenuController extends Controller
 {
@@ -34,6 +35,7 @@ class ApiMenuController extends Controller
      */
     public function store(Request $request)
     {
+        if (Auth::user()->isAdministrator()) {
         $request->validate([
             'title' => 'required|unique:menus',
             'restaurant_id' => 'required'
@@ -42,6 +44,7 @@ class ApiMenuController extends Controller
         $rest->title = $request->input('title');
         $rest->restaurant_id = $request->input('restaurant_id');
         return $rest->save();
+    }
     }
 
     /**
@@ -74,6 +77,7 @@ class ApiMenuController extends Controller
      */
     public function update(Request $request, $id)
     {   
+        if (Auth::user()->isAdministrator()) {
         $request->validate([
             'restaurant_id' => 'required'
         ]);
@@ -82,7 +86,7 @@ class ApiMenuController extends Controller
         $rest->restaurant_id = $request->input('restaurant_id');
         return $rest->save();
     }
-
+    }
     /**
      * Remove the specified resource from storage.
      *
@@ -91,8 +95,10 @@ class ApiMenuController extends Controller
      */
     public function destroy($id)
     {
+        if (Auth::user()->isAdministrator()) {
         return (Menu::destroy($id) == 1) ?
             response()->json(['success' => 'success'], 200) :
             response()->json(['error' => 'delete not successful'], 500);
     }
+}
 }
