@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Menu;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ApiRestaurantController extends Controller
 {
@@ -35,6 +36,7 @@ class ApiRestaurantController extends Controller
      */
     public function store(Request $request)
     {
+        if (Auth::user()->isAdministrator()) {
         $request->validate([
             'title' => 'required|unique:restaurants',
             'code' => 'unique:restaurants'
@@ -46,7 +48,7 @@ class ApiRestaurantController extends Controller
         $rest->address = $request->input('address');
         return $rest->save();
     }
-
+    }
     /**
      * Display the specified resource.
      *
@@ -82,6 +84,7 @@ class ApiRestaurantController extends Controller
         //     'title' => 'required:restaurants',
         //     'code' => 'unique:restaurants'
         // ]);
+        if (Auth::user()->isAdministrator()) {
         $rest = Restaurant::find($id);
         $rest->title = $request->input('title');
         $rest->code = $request->input('code');
@@ -89,7 +92,7 @@ class ApiRestaurantController extends Controller
         $rest->address = $request->input('address');
         return $rest->save();
     }
-
+    }
     /**
      * Remove the specified resource from storage.
      *
@@ -98,8 +101,10 @@ class ApiRestaurantController extends Controller
      */
     public function destroy($id)
     {
+        if (Auth::user()->isAdministrator()) {
         return (Restaurant::destroy($id) == 1) ?
             response()->json(['success' => 'success'], 200) :
             response()->json(['error' => 'delete not successful'], 500);
     }
+}
 }
