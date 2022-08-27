@@ -28,6 +28,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::resource('/restaurants', ApiRestaurantController::class);
     Route::resource('/menus', ApiMenuController::class);
     Route::resource('/dishes', ApiDishController::class);
+    Route::get('search/{key?}', [ApiRestaurantController::class, 'searchRestaurant']);
 });
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');

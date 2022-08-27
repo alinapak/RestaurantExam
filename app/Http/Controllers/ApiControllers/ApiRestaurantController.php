@@ -10,10 +10,10 @@ use Illuminate\Support\Facades\Auth;
 
 class ApiRestaurantController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:api');
+    // }
     public function index()
     {
         return Restaurant::with('menu')->get();
@@ -37,17 +37,17 @@ class ApiRestaurantController extends Controller
     public function store(Request $request)
     {
         if (Auth::user()->isAdministrator()) {
-        $request->validate([
-            'title' => 'required|unique:restaurants',
-            'code' => 'unique:restaurants'
-        ]);
-        $rest = new Restaurant();
-        $rest->title = $request->input('title');
-        $rest->code = $request->input('code');
-        $rest->city = $request->input('city');
-        $rest->address = $request->input('address');
-        return $rest->save();
-    }
+            $request->validate([
+                'title' => 'required|unique:restaurants',
+                'code' => 'unique:restaurants'
+            ]);
+            $rest = new Restaurant();
+            $rest->title = $request->input('title');
+            $rest->code = $request->input('code');
+            $rest->city = $request->input('city');
+            $rest->address = $request->input('address');
+            return $rest->save();
+        }
     }
     /**
      * Display the specified resource.
@@ -85,13 +85,13 @@ class ApiRestaurantController extends Controller
         //     'code' => 'unique:restaurants'
         // ]);
         if (Auth::user()->isAdministrator()) {
-        $rest = Restaurant::find($id);
-        $rest->title = $request->input('title');
-        $rest->code = $request->input('code');
-        $rest->city = $request->input('city');
-        $rest->address = $request->input('address');
-        return $rest->save();
-    }
+            $rest = Restaurant::find($id);
+            $rest->title = $request->input('title');
+            $rest->code = $request->input('code');
+            $rest->city = $request->input('city');
+            $rest->address = $request->input('address');
+            return $rest->save();
+        }
     }
     /**
      * Remove the specified resource from storage.
@@ -102,9 +102,13 @@ class ApiRestaurantController extends Controller
     public function destroy($id)
     {
         if (Auth::user()->isAdministrator()) {
-        return (Restaurant::destroy($id) == 1) ?
-            response()->json(['success' => 'success'], 200) :
-            response()->json(['error' => 'delete not successful'], 500);
+            return (Restaurant::destroy($id) == 1) ?
+                response()->json(['success' => 'success'], 200) :
+                response()->json(['error' => 'delete not successful'], 500);
+        }
     }
-}
+    function searchRestaurant($key=null)
+    {
+        return Restaurant::where('title', 'Like', "%$key%")->with('menu')->get();
+    }
 }
