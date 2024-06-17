@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ApiControllers\ApiDishController;
 use App\Http\Controllers\ApiControllers\ApiMenuController;
+use App\Http\Controllers\ApiControllers\ApiOrderController;
+use App\Http\Controllers\ApiControllers\ApiOrderItemController;
 use App\Http\Controllers\ApiControllers\ApiRestaurantController;
 use App\Http\Controllers\ApiControllers\AuthController;
 use App\Models\Dish;
@@ -28,6 +30,8 @@ Route::group(['prefix' => 'v1'], function () {
     Route::resource('/restaurants', ApiRestaurantController::class);
     Route::resource('/menus', ApiMenuController::class);
     Route::resource('/dishes', ApiDishController::class);
+    Route::resource('/orders', ApiOrderController::class);
+    Route::resource('/orderitem', ApiOrderItemController::class);
     Route::get('search/{key?}', [ApiRestaurantController::class, 'searchRestaurant']);
 });
 Route::controller(AuthController::class)->group(function () {

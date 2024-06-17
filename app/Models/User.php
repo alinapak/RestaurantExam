@@ -68,4 +68,7 @@ class User extends Authenticatable implements JWTSubject
     public function isAdministrator() {
         return $this->roles()->where('role', 'admin')->exists();
      }
+     public function order(){
+        return $this->hasMany(Order::class);
+    }
 }
